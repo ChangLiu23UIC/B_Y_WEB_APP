@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Processor</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #dataForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #buttonWrapper {
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+</head>
+<body>
+    <h1>B and Y ion seperation</h1>
+    <form id="dataForm">
+        <textarea id="dataInput" name="data" rows="1" cols="50" placeholder="Enter peptide sequence here"></textarea><br>
+        <button type="button" id="processButton">Process Data</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('processButton').addEventListener('click', function() {
+            var peptide = document.getElementById('dataInput').value;
+            fetch('/process-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: peptide }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Now `data` is the dataframe as a JSON object
+                var resultHtml = '<table><tr><th>Seq</th><th>#</th><th>B</th><th>Y</th><th>#(+1)</th></tr>';
+                data.forEach(row => {
+                    resultHtml += `<tr><td>${row.Seq}</td><td>${row['#']}</td><td>${row.B}</td><td>${row.Y}</td><td>${row['#(+1)']}</td></tr>`;
+                });
+                resultHtml += '</table>';
+                document.getElementById('result').innerHTML = resultHtml;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
+</body>
+</html>
