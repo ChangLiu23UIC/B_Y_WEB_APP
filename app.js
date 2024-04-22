@@ -2,7 +2,7 @@ const express = require('express');
 const { exec } = require('child_process');
 const path = require('path');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -34,4 +34,16 @@ app.post('/process-data', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
+    // Open the default browser after the server starts
+    switch (process.platform) { 
+        case 'darwin':
+            exec(`open http://localhost:${PORT}`);
+            break;
+        case 'win32':
+            exec(`start http://localhost:${PORT}`);
+            break;
+        default:
+            exec(`xdg-open http://localhost:${PORT}`);
+            break;
+    }
 });
