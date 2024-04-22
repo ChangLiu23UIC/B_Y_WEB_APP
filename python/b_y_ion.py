@@ -2,14 +2,14 @@ from protein_calculate import *
 import pandas as pd
 
 
-def cal_b_y_ion_mass(peptide):
-    sorted_list_of_mass = []
-    protein_list = []
-    protein_list[:0] = peptide.upper()
-    b_and_y = []
-    b_ions = []
-    y_ions = []
-    #split the peptides
+def cal_b_y_ion_mass(peptide): 
+    sorted_list_of_mass = [] 
+    protein_list = [] 
+    protein_list[:0] = peptide.upper() 
+    b_and_y = [] 
+    b_ions = [] 
+    y_ions = [] 
+    #split the peptides 
     for i in range(1,len(protein_list)+1):
         # split the protein in different positions and group them into either b-ion or y-ion
         b_ion = protein_list[0:i]
